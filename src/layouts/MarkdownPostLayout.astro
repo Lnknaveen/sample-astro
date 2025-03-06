@@ -1,0 +1,44 @@
+---
+import MainLayout from "./MainLayout.astro";
+const { frontmatter } = Astro.props;
+---
+
+<MainLayout pageTitle={frontmatter.title}>
+  <section class="container md:px-12 py-12 px-4 sm:px-6 lg:px-8 pb-10">
+    <div
+      class="md:flex-row md:items-center gap-10 bg-white rounded-xl shadow-md p-6"
+    >
+      <h2 class="text-3xl font-bold text-gray-900">
+        {frontmatter.description}
+      </h2>
+      <p class="mt-2">{frontmatter.pubDate.toString().slice(0, 10)}</p>
+      <p class="mt-2 mb-4">
+        Written by: <span class="font-bold">{frontmatter.author}</span>
+      </p>
+      <section class="flex flex-wrap gap-4">
+        {
+          frontmatter.tags.map((tag: string) => (
+            <div class="mb-6 transition-transform duration-500 hover:scale-110">
+              <a
+                class="px-6 py-3 text-gray-700 font-medium rounded-lg shadow-md bg-gray-200 cursor-pointer"
+                href={`/tags/${tag}`}
+              >
+                {tag}
+              </a>
+            </div>
+          ))
+        }
+      </section>
+      <div class="mb-6 transition-transform duration-500 hover:scale-110">
+        <img
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          class="rounded-xl shadow-lg w-full max-w-3xl object-cover my-10 mx-auto"
+        />
+      </div>
+      <div class="prose max-w-none mt-10">
+        <slot />
+      </div>
+    </div>
+  </section>
+</MainLayout>

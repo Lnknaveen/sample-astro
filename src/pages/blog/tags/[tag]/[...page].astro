@@ -1,0 +1,37 @@
+---
+import MainLayout from "../../../../layouts/MainLayout.astro";
+import Blogs from "../../../../components/Blogs.astro";
+
+export async function getStaticPaths({ paginate }) {
+  const posts = Object.values(
+    import.meta.glob("../posts/*.md", { eager: true })
+  );
+
+  const tags = posts.flatMap((post) => [...post.data.tags]);
+  const uniqueTags = [...new Set(tags)];
+
+  return uniqueTags.flatMap((tag) => {
+    const filteredPosts = posts.filter((post) => post.data.tags.includes(tag));
+
+    return [...paginate(filteredPosts, { params: { tag }, pageSize: 3 })];
+  });
+}
+
+const posts = Object.values(
+    import.meta.glob("../posts/*.md", { eager: true })
+  );
+
+const uniqueTags = Array.from(
+  new Set(posts.flatMap((post) => post.data.tags))
+);
+
+const { page } = Astro.props;
+const { tag } = Astro.params;
+---
+
+<MainLayout >
+  <section class="py-24 px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Blogs</h1>
+  </section>
+  <Blogs page={page} />
+</MainLayout>

@@ -1,0 +1,11 @@
+---
+import BlogPost from "./BlogPost.astro";
+import Pagination from "./Pagination.astro";
+
+const { page } = Astro.props;
+---
+
+<section>
+  {page.data.map((post: any) => <BlogPost post={post} />)}
+</section>
+<Pagination page={page} />
